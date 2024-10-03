@@ -2,6 +2,8 @@
 import {createContext, useContext, useState, useEffect} from 'react'
 import { useAuth  } from './AuthContext'
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const ToDoListContext = createContext()
 
 const ToDoListProvider = ({children}) =>{
@@ -16,7 +18,7 @@ const ToDoListProvider = ({children}) =>{
 const getTodo = async () => {
   if(!accessToken) return null
   try {
-    const response = await fetch("http://localhost:5000/api/todos", {
+    const response = await fetch(`${apiUrl}/api/todos`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +42,7 @@ const getTodo = async () => {
 
 const createTodo = async (name, description) => {
   try {
-    const response = await fetch("http://localhost:5000/api/todos", {
+    const response = await fetch(`${apiUrl}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +58,7 @@ const createTodo = async (name, description) => {
         return console.log("access denied")
       }
 
-       const retryResponse = await fetch("http://localhost:5000/api/todos", {
+       const retryResponse = await fetch(`${apiUrl}/api/todos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +94,7 @@ const createTodo = async (name, description) => {
 
 const updateTodo = async (id, updatedTitle, updatedDescription) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+    const response = await fetch(`${apiUrl}/api/todos/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +122,7 @@ const updateTodo = async (id, updatedTitle, updatedDescription) => {
 
 const deleteTodo = async (id) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+    const response = await fetch(`${apiUrl}/api/todos/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

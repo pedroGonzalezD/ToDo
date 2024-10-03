@@ -1,6 +1,6 @@
 import {createContext, useContext, useState, useEffect} from 'react'
 /* eslint-disable react/prop-types */
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const AuthContext = createContext()
 
 export const useAuth = () => useContext(AuthContext) 
@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [accessToken, setAccessToken] = useState("") 
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState("")
   const [userInfo, setUserInfo] = useState({
     username: '',
     id: '',
@@ -26,13 +25,14 @@ export const AuthProvider = ({ children }) => {
   
   const newAccessToken = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/refresh-token`, {
+      const response = await fetch(`${apiUrl}/api/refresh-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include", 
       });
+      
       
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +45,11 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
 
         return data.newAccessToken; 
-      } 
+      } else {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
     } catch (err) {
       setIsAuthenticated(false);
       setIsLoading(false);
@@ -55,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 
   const authenticate = async (url, payload, isSignIn) => {
     try {
-      const response = await fetch(`http://localhost:5000${url}`, {
+      const response = await fetch(`${apiUrl}${url}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/logout', {
+      const response = await fetch(`${apiUrl}/api/logout`, {
         method: 'POST',
         credentials: 'include',
       });
