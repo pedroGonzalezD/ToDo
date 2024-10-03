@@ -1,4 +1,4 @@
-import { useToDoList } from "../contexts/toDoContext"
+import { useToDoList } from "../contexts/ToDoContext"
 import {useState} from "react"
 
 import style from "../styles/stylesComponents/Main.module.scss"

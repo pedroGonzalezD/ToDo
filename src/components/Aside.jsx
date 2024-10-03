@@ -1,5 +1,5 @@
 import {useState} from "react"
-import { useAuth } from "../contexts/authContext"
+import { useAuth } from "../contexts/AuthContext"
 import { useToDoList } from "../contexts/ToDoContext";
 
 import style from "../styles/stylesComponents/Aside.module.scss"
