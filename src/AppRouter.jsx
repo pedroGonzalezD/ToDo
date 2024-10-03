@@ -1,7 +1,7 @@
 import {router} from './router'
 import {RouterProvider} from 'react-router-dom'
-import ToDoListProvider from "./contexts/toDoContext"
-import { AuthProvider } from './contexts/authContext'
+import ToDoListProvider from "./contexts/ToDoContext.jsx"
+import { AuthProvider } from './contexts/authContext.jsx'
 
 const AppRouter = () => {
   return(

@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [accessToken, setAccessToken] = useState("") 
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
   const [userInfo, setUserInfo] = useState({
     username: '',
     id: '',
@@ -30,33 +31,25 @@ export const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Para incluir el refresh token
+        credentials: "include", 
       });
       
-        console.log("hola")
       if (response.ok) {
         const data = await response.json();
-        setAccessToken(data.newAccessToken); // Actualizar el token en el estado
+        setAccessToken(data.newAccessToken); 
         setUserInfo({
           username: data.user,
           id: data.id,
         });
         setIsAuthenticated(true);
         setIsLoading(false);
-        console.log("renovado")
 
-        return data.newAccessToken; // Retorna el nuevo access token
-      } else {
-        console.error("Error en la renovación del token:", response.statusText);
-        setIsAuthenticated(false);
-        setIsLoading(false);
-        return null;
-      }
-    } catch (error) {
-      console.error("Error en la solicitud de renovación del token:", error);
+        return data.newAccessToken; 
+      } 
+    } catch (err) {
       setIsAuthenticated(false);
       setIsLoading(false);
-      return null;
+      return;
     }
   };
 
@@ -71,7 +64,6 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include',
       });
 
-        console.log(response)
         let data
         const contentType = response.headers.get('content-Type')
 
@@ -94,13 +86,12 @@ export const AuthProvider = ({ children }) => {
           });
         }
 
-        console.log('Success:', data.accessToken, data);
-        console.log(data.accessToken)
+  
         
         return { success: true, data};
       
     } catch (err) {
-      console.error('Error', err);
+      
       setIsLoading(false);
       return {success: false}
     }
@@ -110,17 +101,15 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch('http://localhost:5000/api/logout', {
         method: 'POST',
-        credentials: 'include', // Para eliminar la cookie del refresh token
+        credentials: 'include',
       });
 
       if (response.ok) {
         setIsAuthenticated(false);
         setAccessToken('');
         setUserInfo({ username: '', id: '' });
-        console.log('Logout successful');
-      } else {
-        console.error('Failed to logout');
-      }
+        
+      } 
     } catch (err) {
       console.error('Logout error:', err);
     }

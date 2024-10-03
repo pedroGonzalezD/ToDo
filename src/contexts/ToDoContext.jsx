@@ -14,6 +14,7 @@ const ToDoListProvider = ({children}) =>{
   }, [userInfo])
 
 const getTodo = async () => {
+  if(!accessToken) return null
   try {
     const response = await fetch("http://localhost:5000/api/todos", {
       method: "GET",
@@ -27,7 +28,7 @@ const getTodo = async () => {
       throw new Error(errorMessage);
     }
     const data = await response.json();
-    console.log("Fetched todos:", data); 
+    
     setToDoList(data);
 
     return data;
@@ -70,7 +71,6 @@ const createTodo = async (name, description) => {
       }
       
       const data = await retryResponse.json();
-      console.log("Fetched todos:", data);
       setToDoList([data, ...toDoList]);
       return data;
     }
@@ -107,9 +107,7 @@ const updateTodo = async (id, updatedTitle, updatedDescription) => {
     }
 
     const updatedTodo = await response.json();
-    console.log("Updated todo:", updatedTodo);
-
-    // Actualiza la lista de to-dos
+    
     setToDoList(
       toDoList.map((todo) => (todo._id === id ? updatedTodo : todo))
     );
@@ -134,10 +132,8 @@ const deleteTodo = async (id) => {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
-    // Actualiza la lista de tareas eliminando la tarea por su id
+    
     setToDoList((prevList) => prevList.filter((todo) => todo._id !== id));
-
-    console.log(`Todo with id ${id} has been deleted`);
   } catch (error) {
     console.error(error);
   }
