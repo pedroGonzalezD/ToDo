@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from '../styles/stylesComponents/Auth.module.scss'
-import { useAuth } from '../contexts/authContext';
+import { useAuth } from '../contexts/AuthContext';
 import {Navigate, useNavigate} from "react-router-dom"
 
 const Auth = () => {
